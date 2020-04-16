@@ -27,7 +27,6 @@ const startPage = 'Categories';
 const createCategoryCard = (category) => {
   const categoryCard = document.createElement('div');
   categoryCard.className = 'col s10 offset-s1 m6 l4 xl3';
-  // categoryCard.textContent = category;
 
   const classCard = document.createElement('div');
   classCard.className = 'card hoverable';
@@ -53,12 +52,32 @@ const createCategoryCard = (category) => {
 
 const createWordCard = (word) => {
   const wordCard = document.createElement('div');
-  wordCard.textContent = word.word;
+  wordCard.className = 'col s10 offset-s1 m6 l4 xl3';
+
+  const classCard = document.createElement('div');
+  classCard.className = 'card hoverable';
+
+  const classCardImage = document.createElement('div');
+  classCardImage.className = 'card-image';
+
+  const cardImage = document.createElement('img');
+  cardImage.setAttribute('src', `/cards/${word.image}`);
+  cardImage.setAttribute('alt', word.word);
+
+  const classCardContent = document.createElement('div');
+  classCardContent.className = 'card-content truncate';
+  classCardContent.textContent = word.word;
+
+  classCardImage.append(cardImage);
+  classCard.append(classCardImage);
+  classCard.append(classCardContent);
+  wordCard.append(classCard);
+
   return wordCard;
 };
 
 const getActiveLink = () => {
-  return document.querySelector('#sidenav a.active');
+  return sidenav.querySelector('a.active');
 };
 
 const renderSidenav = () => {
@@ -96,6 +115,19 @@ const renderPageContainer = () => {
 const addListeners = () => {
   document.addEventListener('DOMContentLoaded', () => {
     M.Sidenav.init(sidenav);
+  });
+
+  sidenav.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A' && !e.target.classList.contains('active')) {
+      getActiveLink().classList.remove('active');
+      e.target.classList.add('active');
+
+      renderLogo();
+      renderPageContainer();
+    }
+
+    const instance = M.Sidenav.getInstance(sidenav);
+    instance.close();
   });
 };
 
