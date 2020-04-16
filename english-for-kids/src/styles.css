@@ -9,3 +9,13 @@
 #sidenav a.active {
   background-color: rgba(0, 0, 0, 0.15);
 }
+
+.card {
+  cursor: pointer;
+}
+
+.card-content {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+}

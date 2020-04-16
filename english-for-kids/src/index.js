@@ -30,10 +30,40 @@ const startPage = 'Categories';
 
 const createCategoryCard = (category) => {
   const categoryCard = document.createElement('div');
-  categoryCard.className = 'col s8 offset-s2 m6 l4 xl3 hoverable';
-  categoryCard.textContent = category;
+  categoryCard.className = 'col s8 offset-s2 m6 l4 xl3';
+  // categoryCard.textContent = category;
+
+  const classCard = document.createElement('div');
+  classCard.className = 'card hoverable';
+
+  const classCardImage = document.createElement('div');
+  classCardImage.className = 'card-image';
+
+  const cardImage = document.createElement('img');
+  cardImage.setAttribute('src', `/cards/${cards[category][0].image}`);
+  cardImage.setAttribute('alt', category);
+
+  const classCardContent = document.createElement('div');
+  classCardContent.className = 'card-content';
+  classCardContent.textContent = category;
+
+  classCardImage.append(cardImage);
+  classCard.append(classCardImage);
+  classCard.append(classCardContent);
+  categoryCard.append(classCard);
+
   return categoryCard;
 };
+
+// <div class="card">
+//   <div class="card-image">
+//     <img src="images/sample-1.jpg">
+//     <span class="card-title">Card Title</span>
+//   </div>
+//   <div class="card-content">
+//     <p></p>
+//   </div>
+// </div>
 
 const createWordCard = (word) => {
   const wordCard = document.createElement('div');
