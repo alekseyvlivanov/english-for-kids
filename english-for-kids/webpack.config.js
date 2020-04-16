@@ -89,6 +89,14 @@ module.exports = {
       {
         from: '_redirects',
       },
+      {
+        from: 'assets/',
+        to: 'assets/',
+      },
+      {
+        from: 'cards/',
+        to: 'cards/',
+      },
     ]),
     new MiniCSSExtractPlugin({
       filename: filename('css'),
@@ -106,7 +114,7 @@ module.exports = {
         use: jsLoaders(),
       },
       {
-        test: /\.(png|svg|jpg)$/,
+        test: /\.(png|svg|jpg|gif)$/,
         use: ['file-loader'],
       },
     ],

@@ -1,0 +1,11 @@
+#menu {
+  display: block;
+}
+
+#sidenav a.top {
+  text-transform: uppercase;
+}
+
+#sidenav a.active {
+  background-color: rgba(0, 0, 0, 0.15);
+}
