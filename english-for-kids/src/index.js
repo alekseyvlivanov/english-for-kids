@@ -42,7 +42,12 @@ const createCategoryCard = (category) => {
   classCardImage.className = 'card-image';
 
   const cardImage = document.createElement('img');
-  cardImage.setAttribute('src', `/cards/${cards[category][0].image}`);
+  cardImage.setAttribute(
+    'src',
+    `/cards/${
+      cards[category][Math.floor(Math.random() * cards[category].length)].image
+    }`,
+  );
   cardImage.setAttribute('alt', category);
 
   const cardTitle = document.createElement('span');
