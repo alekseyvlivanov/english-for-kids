@@ -26,10 +26,11 @@ const startPage = 'Categories';
 
 const createCategoryCard = (category) => {
   const categoryCard = document.createElement('div');
-  categoryCard.className = 'col s10 offset-s1 m6 l4 xl3';
+  categoryCard.className = 'col s12 m6 l4 xl3';
 
   const classCard = document.createElement('div');
-  classCard.className = 'card hoverable';
+  classCard.className = 'card hoverable category';
+  classCard.dataset.key = category;
 
   const classCardImage = document.createElement('div');
   classCardImage.className = 'card-image';
@@ -38,13 +39,13 @@ const createCategoryCard = (category) => {
   cardImage.setAttribute('src', `/cards/${cards[category][0].image}`);
   cardImage.setAttribute('alt', category);
 
-  const classCardContent = document.createElement('div');
-  classCardContent.className = 'card-content truncate';
-  classCardContent.textContent = category;
+  const cardTitle = document.createElement('span');
+  cardTitle.className = 'card-title';
+  cardTitle.innerHTML = `<span class="new badge truncate" data-badge-caption="">${category}</span>`;
 
   classCardImage.append(cardImage);
+  classCardImage.append(cardTitle);
   classCard.append(classCardImage);
-  classCard.append(classCardContent);
   categoryCard.append(classCard);
 
   return categoryCard;
@@ -52,10 +53,11 @@ const createCategoryCard = (category) => {
 
 const createWordCard = (word) => {
   const wordCard = document.createElement('div');
-  wordCard.className = 'col s10 offset-s1 m6 l4 xl3';
+  wordCard.className = 'col s12 m6 l4 xl3';
 
   const classCard = document.createElement('div');
-  classCard.className = 'card hoverable';
+  classCard.className = 'card hoverable word';
+  classCard.dataset.key = word.word;
 
   const classCardImage = document.createElement('div');
   classCardImage.className = 'card-image';
@@ -128,6 +130,24 @@ const addListeners = () => {
 
     const instance = M.Sidenav.getInstance(sidenav);
     instance.close();
+  });
+
+  pageContainer.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+
+    if (logo.textContent === startPage) {
+      getActiveLink().classList.remove('active');
+
+      const sidenavLinks = Array.from(sidenav.querySelectorAll('a'));
+      const targetLink = sidenavLinks.find(
+        (a) => a.textContent === card.dataset.key,
+      );
+
+      targetLink.classList.add('active');
+
+      renderLogo();
+      renderPageContainer();
+    }
   });
 };
 
