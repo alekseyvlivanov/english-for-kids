@@ -24,6 +24,12 @@ const startPage = 'Categories';
 //   activeCard: null,
 // };
 
+const playAudio = (url) => {
+  if (url) {
+    new Audio(url).play();
+  }
+};
+
 const createCategoryCard = (category) => {
   const categoryCard = document.createElement('div');
   categoryCard.className = 'col s12 m6 l4 xl3';
@@ -68,7 +74,8 @@ const createWordCard = (word) => {
 
   const classCardContent = document.createElement('div');
   classCardContent.className = 'card-content truncate';
-  classCardContent.textContent = word.word;
+  // classCardContent.textContent = word.word;
+  classCardContent.innerHTML = `<div>${word.word}</div><div class="rotate"></div>`;
 
   classCardImage.append(cardImage);
   classCard.append(classCardImage);
@@ -135,6 +142,8 @@ const addListeners = () => {
   pageContainer.addEventListener('click', (e) => {
     const card = e.target.closest('.card');
 
+    if (!card) return;
+
     if (logo.textContent === startPage) {
       getActiveLink().classList.remove('active');
 
@@ -147,6 +156,11 @@ const addListeners = () => {
 
       renderLogo();
       renderPageContainer();
+    } else {
+      const categoryWords = cards[logo.textContent];
+      const word = categoryWords.find((w) => w.word === card.dataset.key);
+
+      playAudio(`/cards/${word.audioSrc}`);
     }
   });
 };

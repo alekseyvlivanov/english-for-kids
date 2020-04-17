@@ -27,6 +27,10 @@ nav .brand-logo {
   padding: 10px;
 }
 
+.card .card-content {
+  padding: 10px;
+}
+
 span.badge {
   height: 2.8rem;
   line-height: 2.6rem;
@@ -35,7 +39,23 @@ span.badge {
 
 span.badge.new,
 .card-content {
+  display: flex;
+  justify-content: space-around;
   font-size: 1.6rem;
   font-weight: 500;
   text-align: center;
+}
+
+.rotate {
+  height: 40px;
+  width: 40px;
+  background-image: url(/assets/img/rotate.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 24px;
+  filter: grayscale(1);
+}
+
+.rotate:hover {
+  filter: grayscale(0);
 }
