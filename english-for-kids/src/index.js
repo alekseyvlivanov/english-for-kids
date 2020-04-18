@@ -147,9 +147,11 @@ const renderPageContainer = () => {
       row.append(createCategoryCard(category));
     });
   } else {
-    cards[activeLink.textContent].forEach((word) => {
-      row.append(createWordCard(word));
-    });
+    cards[activeLink.textContent]
+      .sort(() => Math.random() - 0.5)
+      .forEach((word) => {
+        row.append(createWordCard(word));
+      });
   }
 
   pageContainer.innerHTML = '';
