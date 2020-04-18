@@ -215,6 +215,17 @@ const addListeners = () => {
       flipCard.classList.remove('is-flipped');
     }
   });
+
+  pageContainer.addEventListener('touchend', (e) => {
+    if (e.target.classList.contains('rotate')) {
+      setTimeout(() => {
+        const flipCard = e.target.closest('.is-flipped');
+        if (flipCard) {
+          flipCard.classList.remove('is-flipped');
+        }
+      }, 1500);
+    }
+  });
 };
 
 renderSidenav();
