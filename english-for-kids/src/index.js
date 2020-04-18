@@ -66,26 +66,56 @@ const createWordCard = (word) => {
   const wordCard = document.createElement('div');
   wordCard.className = 'col s12 m6 l4 xl3';
 
-  const classCard = document.createElement('div');
-  classCard.className = 'card hoverable word';
-  classCard.dataset.key = word.word;
+  const flipCard = document.createElement('div');
+  flipCard.className = 'flip-card';
 
-  const classCardImage = document.createElement('div');
-  classCardImage.className = 'card-image';
+  const cardFaceFront = document.createElement('div');
+  cardFaceFront.className = 'card-face-front';
 
-  const cardImage = document.createElement('img');
-  cardImage.setAttribute('src', `/cards/${word.image}`);
-  cardImage.setAttribute('alt', word.word);
+  const classCardFront = document.createElement('div');
+  classCardFront.className = 'card hoverable word';
+  classCardFront.dataset.key = word.word;
 
-  const classCardContent = document.createElement('div');
-  classCardContent.className = 'card-content truncate';
-  // classCardContent.textContent = word.word;
-  classCardContent.innerHTML = `<div>${word.word}</div><div class="rotate"></div>`;
+  const classCardFrontImage = document.createElement('div');
+  classCardFrontImage.className = 'card-image';
 
-  classCardImage.append(cardImage);
-  classCard.append(classCardImage);
-  classCard.append(classCardContent);
-  wordCard.append(classCard);
+  const cardFrontImage = document.createElement('img');
+  cardFrontImage.setAttribute('src', `/cards/${word.image}`);
+  cardFrontImage.setAttribute('alt', word.word);
+
+  const classCardFrontContent = document.createElement('div');
+  classCardFrontContent.className = 'card-content truncate';
+  classCardFrontContent.innerHTML = `<div>${word.word}</div><div class="rotate"></div>`;
+
+  const cardFaceBack = document.createElement('div');
+  cardFaceBack.className = 'card-face-back';
+
+  const classCardBack = document.createElement('div');
+  classCardBack.className = 'card hoverable word';
+  classCardBack.dataset.key = word.word;
+
+  const classCardBackImage = document.createElement('div');
+  classCardBackImage.className = 'card-image';
+
+  const cardBackImage = document.createElement('img');
+  cardBackImage.setAttribute('src', `/cards/${word.image}`);
+  cardBackImage.setAttribute('alt', word.word);
+
+  const classCardBackContent = document.createElement('div');
+  classCardBackContent.className = 'card-content truncate';
+  classCardBackContent.innerHTML = `<div>${word.translation}</div>`;
+
+  classCardFrontImage.append(cardFrontImage);
+  classCardBackImage.append(cardBackImage);
+  classCardFront.append(classCardFrontImage);
+  classCardFront.append(classCardFrontContent);
+  classCardBack.append(classCardBackImage);
+  classCardBack.append(classCardBackContent);
+  cardFaceFront.append(classCardFront);
+  cardFaceBack.append(classCardBack);
+  flipCard.append(cardFaceFront);
+  flipCard.append(cardFaceBack);
+  wordCard.append(flipCard);
 
   return wordCard;
 };
@@ -161,11 +191,28 @@ const addListeners = () => {
 
       renderLogo();
       renderPageContainer();
-    } else {
-      const categoryWords = cards[logo.textContent];
-      const word = categoryWords.find((w) => w.word === card.dataset.key);
 
-      playAudio(`/cards/${word.audioSrc}`);
+      return;
+    }
+
+    if (e.target.classList.contains('rotate')) {
+      const flipCard = e.target.closest('.flip-card');
+      flipCard.classList.add('is-flipped');
+
+      return;
+    }
+
+    const categoryWords = cards[logo.textContent];
+    const word = categoryWords.find((w) => w.word === card.dataset.key);
+
+    playAudio(`/cards/${word.audioSrc}`);
+  });
+
+  pageContainer.addEventListener('mouseout', (e) => {
+    const flipCard = e.target.closest('.is-flipped');
+
+    if (flipCard && e.relatedTarget.contains(flipCard)) {
+      flipCard.classList.remove('is-flipped');
     }
   });
 };

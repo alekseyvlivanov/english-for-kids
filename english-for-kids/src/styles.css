@@ -19,8 +19,37 @@ nav .brand-logo {
   font-size: 1.8rem;
 }
 
+.col {
+  perspective: 500px;
+}
+
+.flip-card {
+  margin: 7px 0 14px 0;
+  position: relative;
+  transition: transform 0.3s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face-back {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
 .card {
   cursor: pointer;
+}
+
+.card.word {
+  margin: 0;
 }
 
 .card .card-image .card-title {
@@ -47,12 +76,12 @@ span.badge.new,
 }
 
 .rotate {
-  height: 40px;
-  width: 40px;
+  height: 32px;
+  width: 32px;
   background-image: url(/assets/img/rotate.png);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 24px;
+  background-size: 32px;
   filter: grayscale(1);
 }
 
