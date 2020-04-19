@@ -7,18 +7,23 @@ import cards from './cards/cards';
 const categories = Object.keys(cards);
 const sidenav = document.getElementById('sidenav');
 const logo = document.getElementById('logo');
-const playBtn = document.getElementById('play-btn');
+const modeBtn = document.getElementById('mode-btn');
+const rating = document.getElementById('rating');
 const pageContainer = document.getElementById('page-container');
+const playBtn = document.getElementById('play-btn');
+const repeatBtn = document.getElementById('repeat-btn');
 const audioPlayer = document.getElementById('audio');
+const modal = document.getElementById('modal');
 
+const classHide = 'hide';
 const startPage = 'Categories';
 
-// const EFFECTS = {
-//   correct: '/assets/audio/correct.mp3',
-//   error: '/assets/audio/error.mp3',
-//   failure: '/assets/audio/failure.mp3',
-//   success: '/assets/audio/success.mp3',
-// };
+const EFFECTS = {
+  correct: '/assets/audio/correct.mp3',
+  error: '/assets/audio/error.mp3',
+  failure: '/assets/audio/failure.mp3',
+  success: '/assets/audio/success.mp3',
+};
 
 const MODES = {
   train: 'train',
@@ -27,6 +32,11 @@ const MODES = {
 
 const currentState = {
   mode: MODES.train,
+  gameStarted: false,
+  wordsArray: [],
+  word: {},
+  correctAnswers: 0,
+  wrongAnswers: 0,
 };
 
 const playAudio = (url) => {
@@ -130,17 +140,102 @@ const getActiveLink = () => {
   return sidenav.querySelector('a.active');
 };
 
+const updateRating = (success) => {
+  const star = document.createElement('img');
+
+  star.setAttribute(
+    'src',
+    success ? '/assets/img/star-win.svg' : '/assets/img/star.svg',
+  );
+  star.setAttribute('alt', success ? 'win' : 'lose');
+
+  rating.append(star);
+};
+
 const updateMode = () => {
-  playBtn.textContent = currentState.mode;
+  currentState.gameStarted = false;
+  currentState.wordsArray = [];
+  currentState.word = {};
+  currentState.correctAnswers = 0;
+  currentState.wrongAnswers = 0;
 
   const activeLink = getActiveLink();
-  const elementsToUpdate =
-    activeLink.textContent === startPage ? '.badge' : '.card-content';
-  const addRemove = currentState.mode === MODES.play ? 'add' : 'remove';
+  const pageAddRemove = currentState.mode === MODES.play ? 'add' : 'remove';
 
-  pageContainer
-    .querySelectorAll(elementsToUpdate)
-    .forEach((a) => a.classList[addRemove]('play'));
+  modeBtn.textContent = currentState.mode;
+  modeBtn.classList[pageAddRemove](MODES.play);
+  sidenav.classList[pageAddRemove](MODES.play);
+
+  rating.innerHTML = '';
+
+  if (activeLink.textContent === startPage) {
+    const elementsToUpdate = pageContainer.querySelectorAll('.badge');
+    elementsToUpdate.forEach((e) => e.classList[pageAddRemove](MODES.play));
+
+    playBtn.classList.add(classHide);
+    repeatBtn.classList.add(classHide);
+  } else {
+    const elementsToUpdate = pageContainer.querySelectorAll('.card-content');
+    elementsToUpdate.forEach((e) => e.classList[pageAddRemove](classHide));
+
+    if (currentState.mode === MODES.play) {
+      if (currentState.gameStarted) {
+        playBtn.classList.add(classHide);
+        repeatBtn.classList.remove(classHide);
+      } else {
+        playBtn.classList.remove(classHide);
+        repeatBtn.classList.add(classHide);
+      }
+    } else {
+      playBtn.classList.add(classHide);
+      repeatBtn.classList.add(classHide);
+    }
+
+    document
+      .querySelectorAll('.card.word.inactive')
+      .forEach((e) => e.classList.remove('inactive'));
+  }
+};
+
+const playNextWord = () => {
+  if (currentState.wordsArray.length) {
+    currentState.word = currentState.wordsArray.pop();
+
+    playAudio(`/cards/${currentState.word.audioSrc}`);
+  } else {
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+
+    const modalTitle = document.createElement('h2');
+    const modalImg = document.createElement('img');
+
+    if (currentState.wrongAnswers === 0) {
+      modalTitle.textContent = 'You win!';
+      modalImg.setAttribute('src', '/assets/img/success.jpg');
+      modalImg.setAttribute('alt', 'success');
+
+      setTimeout(() => playAudio(EFFECTS.success), 0);
+    } else {
+      modalTitle.textContent = `You have ${currentState.wrongAnswers} error(s)!`;
+      modalImg.setAttribute('src', '/assets/img/failure.jpg');
+      modalImg.setAttribute('alt', 'failure');
+
+      setTimeout(() => playAudio(EFFECTS.failure), 0);
+    }
+
+    modalContent.append(modalTitle);
+    modalContent.append(modalImg);
+
+    modal.innerHTML = '';
+    modal.append(modalContent);
+
+    M.Modal.init(modal);
+    const instance = M.Modal.getInstance(modal);
+    instance.open();
+
+    updateMode();
+    sidenav.querySelector('a.top').click();
+  }
 };
 
 const renderSidenav = () => {
@@ -193,11 +288,10 @@ const addListeners = () => {
     instance.close();
   });
 
-  playBtn.addEventListener('click', (e) => {
-    e.target.classList.toggle('play');
-    currentState.mode = e.target.classList.contains('play')
-      ? MODES.play
-      : MODES.train;
+  modeBtn.addEventListener('click', (e) => {
+    currentState.mode = e.target.classList.contains(MODES.play)
+      ? MODES.train
+      : MODES.play;
 
     updateMode();
   });
@@ -235,6 +329,25 @@ const addListeners = () => {
       const word = categoryWords.find((w) => w.word === card.dataset.key);
 
       playAudio(`/cards/${word.audioSrc}`);
+
+      return;
+    }
+
+    if (!currentState.gameStarted) return;
+
+    if (card.dataset.key === currentState.word.word) {
+      card.classList.add('inactive');
+      currentState.correctAnswers += 1;
+
+      playAudio(EFFECTS.correct);
+      updateRating(true);
+
+      setTimeout(() => playNextWord(), 1000);
+    } else if (!card.classList.contains('inactive')) {
+      currentState.wrongAnswers += 1;
+
+      playAudio(EFFECTS.error);
+      updateRating(false);
     }
   });
 
@@ -256,6 +369,23 @@ const addListeners = () => {
       }, 1500);
     }
   });
+
+  playBtn.addEventListener('click', () => {
+    currentState.gameStarted = true;
+
+    playBtn.classList.add(classHide);
+    repeatBtn.classList.remove(classHide);
+
+    currentState.wordsArray = [...cards[logo.textContent]].sort(
+      () => Math.random() - 0.5,
+    );
+
+    setTimeout(() => playNextWord(), 500);
+  });
+
+  repeatBtn.addEventListener('click', () =>
+    playAudio(`/cards/${currentState.word.audioSrc}`),
+  );
 };
 
 renderSidenav();

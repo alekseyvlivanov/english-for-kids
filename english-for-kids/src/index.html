@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="container">
-      <ul id="sidenav" class="sidenav">
+      <ul id="sidenav" class="sidenav train">
         <li><a href="#" class="top active">Categories</a></li>
       </ul>
 
@@ -32,7 +32,7 @@
           >
           <ul class="right">
             <li>
-              <a id="play-btn" class="waves-effect waves-light btn-small train">
+              <a id="mode-btn" class="btn-small waves-effect waves-light train">
                 Mode
               </a>
             </li>
@@ -40,13 +40,33 @@
         </div>
       </nav>
 
+      <div id="rating"></div>
+
       <div id="page-container" class="section">
         <div class="progress">
           <div class="indeterminate"></div>
         </div>
       </div>
 
-      <audio id="audio" src=""></audio>
+      <div class="flex">
+        <button
+          id="play-btn"
+          class="btn waves-effect waves-light hide"
+          type="submit"
+        >
+          Start game
+          <i class="material-icons right">school</i>
+        </button>
+
+        <a
+          id="repeat-btn"
+          class="btn-floating btn-large waves-effect waves-light hide"
+          ><i class="material-icons">repeat</i></a
+        >
+      </div>
     </div>
+
+    <audio id="audio" src=""></audio>
+    <div id="modal" class="modal"></div>
   </body>
 </html>
