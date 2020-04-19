@@ -12,6 +12,14 @@
   background-color: rgba(0, 0, 0, 0.15);
 }
 
+#play-btn.train {
+  background: linear-gradient(40deg, #00bf82, #0099ae);
+}
+
+#play-btn.train.play {
+  background: linear-gradient(40deg, #ffd86f, #fc6262);
+}
+
 nav ul a.btn-small {
   margin: 0 10px;
   padding: 0 10px;
@@ -71,10 +79,11 @@ nav .brand-logo {
   padding: 10px;
 }
 
-span.badge {
+span.badge.new {
   height: 2.8rem;
   line-height: 2.6rem;
   margin: 0;
+  background: linear-gradient(40deg, #00bf82, #0099ae);
 }
 
 span.badge.new,
@@ -87,6 +96,14 @@ span.badge.new,
   font-size: 1.3rem;
   font-weight: 500;
   text-align: center;
+}
+
+span.badge.new.play {
+  background: linear-gradient(40deg, #ffd86f, #fc6262);
+}
+
+.card-content.play {
+  display: none;
 }
 
 .rotate {

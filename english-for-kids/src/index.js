@@ -7,26 +7,32 @@ import cards from './cards/cards';
 const categories = Object.keys(cards);
 const sidenav = document.getElementById('sidenav');
 const logo = document.getElementById('logo');
+const playBtn = document.getElementById('play-btn');
 const pageContainer = document.getElementById('page-container');
+const audioPlayer = document.getElementById('audio');
 
 const startPage = 'Categories';
 
-// const MODES = {
-//   train: 'train',
-//   play: 'play',
+// const EFFECTS = {
+//   correct: '/assets/audio/correct.mp3',
+//   error: '/assets/audio/error.mp3',
+//   failure: '/assets/audio/failure.mp3',
+//   success: '/assets/audio/success.mp3',
 // };
 
-// const currentState = {
-//   mode: MODES.train,
-//   categories,
-//   cards,
-//   activeCategory: null,
-//   activeCard: null,
-// };
+const MODES = {
+  train: 'train',
+  play: 'play',
+};
+
+const currentState = {
+  mode: MODES.train,
+};
 
 const playAudio = (url) => {
   if (url) {
-    new Audio(url).play();
+    audioPlayer.src = url;
+    audioPlayer.play();
   }
 };
 
@@ -124,6 +130,19 @@ const getActiveLink = () => {
   return sidenav.querySelector('a.active');
 };
 
+const updateMode = () => {
+  playBtn.textContent = currentState.mode;
+
+  const activeLink = getActiveLink();
+  const elementsToUpdate =
+    activeLink.textContent === startPage ? '.badge' : '.card-content';
+  const addRemove = currentState.mode === MODES.play ? 'add' : 'remove';
+
+  pageContainer
+    .querySelectorAll(elementsToUpdate)
+    .forEach((a) => a.classList[addRemove]('play'));
+};
+
 const renderSidenav = () => {
   categories.forEach((e) => {
     const li = document.createElement('li');
@@ -132,12 +151,9 @@ const renderSidenav = () => {
   });
 };
 
-const renderLogo = () => {
-  logo.textContent = getActiveLink().textContent;
-};
-
 const renderPageContainer = () => {
   const activeLink = getActiveLink();
+  logo.textContent = activeLink.textContent;
 
   const row = document.createElement('div');
   row.className = 'row';
@@ -156,6 +172,8 @@ const renderPageContainer = () => {
 
   pageContainer.innerHTML = '';
   pageContainer.append(row);
+
+  updateMode();
 };
 
 const addListeners = () => {
@@ -168,7 +186,6 @@ const addListeners = () => {
       getActiveLink().classList.remove('active');
       e.target.classList.add('active');
 
-      renderLogo();
       renderPageContainer();
     }
 
@@ -176,22 +193,31 @@ const addListeners = () => {
     instance.close();
   });
 
+  playBtn.addEventListener('click', (e) => {
+    e.target.classList.toggle('play');
+    currentState.mode = e.target.classList.contains('play')
+      ? MODES.play
+      : MODES.train;
+
+    updateMode();
+  });
+
   pageContainer.addEventListener('click', (e) => {
     const card = e.target.closest('.card');
 
     if (!card) return;
 
-    if (logo.textContent === startPage) {
-      getActiveLink().classList.remove('active');
+    const activeLink = getActiveLink();
 
+    if (activeLink.textContent === startPage) {
       const sidenavLinks = Array.from(sidenav.querySelectorAll('a'));
       const targetLink = sidenavLinks.find(
         (a) => a.textContent === card.dataset.key,
       );
 
+      getActiveLink().classList.remove('active');
       targetLink.classList.add('active');
 
-      renderLogo();
       renderPageContainer();
 
       return;
@@ -204,10 +230,12 @@ const addListeners = () => {
       return;
     }
 
-    const categoryWords = cards[logo.textContent];
-    const word = categoryWords.find((w) => w.word === card.dataset.key);
+    if (currentState.mode === MODES.train) {
+      const categoryWords = cards[logo.textContent];
+      const word = categoryWords.find((w) => w.word === card.dataset.key);
 
-    playAudio(`/cards/${word.audioSrc}`);
+      playAudio(`/cards/${word.audioSrc}`);
+    }
   });
 
   pageContainer.addEventListener('mouseout', (e) => {
@@ -231,7 +259,6 @@ const addListeners = () => {
 };
 
 renderSidenav();
-renderLogo();
 renderPageContainer();
 
 addListeners();
