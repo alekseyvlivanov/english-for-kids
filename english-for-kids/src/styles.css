@@ -5,10 +5,12 @@
 }
 
 #sidenav.train {
+  background: -o-linear-gradient(50deg, #00bf82, #0099ae);
   background: linear-gradient(40deg, #00bf82, #0099ae);
 }
 
 #sidenav.train.play {
+  background: -o-linear-gradient(50deg, #ffd86f, #fc6262);
   background: linear-gradient(40deg, #ffd86f, #fc6262);
 }
 
@@ -25,7 +27,8 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-#sidenav a.top {
+#sidenav a.top,
+#sidenav a.bottom {
   text-transform: uppercase;
 }
 
@@ -38,10 +41,12 @@
 }
 
 #mode-btn.train {
+  background: -o-linear-gradient(50deg, #00bf82, #0099ae);
   background: linear-gradient(40deg, #00bf82, #0099ae);
 }
 
 #mode-btn.train.play {
+  background: -o-linear-gradient(50deg, #ffd86f, #fc6262);
   background: linear-gradient(40deg, #ffd86f, #fc6262);
 }
 
@@ -60,7 +65,11 @@ nav .brand-logo {
 }
 
 #rating {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
   height: 32px;
   overflow-x: hidden;
@@ -137,6 +146,7 @@ span.badge.new {
   height: 2.8rem;
   line-height: 2.6rem;
   margin: 0;
+  background: -o-linear-gradient(50deg, #00bf82, #0099ae);
   background: linear-gradient(40deg, #00bf82, #0099ae);
 }
 
@@ -153,6 +163,7 @@ span.badge.new,
 }
 
 span.badge.new.play {
+  background: -o-linear-gradient(50deg, #ffd86f, #fc6262);
   background: linear-gradient(40deg, #ffd86f, #fc6262);
 }
 
@@ -173,14 +184,21 @@ span.badge.new.play {
 }
 
 .flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   margin-bottom: 1rem;
 }
 
 #play-btn,
 #repeat-btn {
+  background: -o-linear-gradient(50deg, #ffd86f, #fc6262);
   background: linear-gradient(40deg, #ffd86f, #fc6262);
 }
 
@@ -194,4 +212,8 @@ span.badge.new.play {
 
 .modal-content img {
   width: 75%;
+}
+
+thead {
+  cursor: pointer;
 }

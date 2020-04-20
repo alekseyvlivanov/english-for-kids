@@ -16,9 +16,11 @@ import {
   playBtn,
   repeatBtn,
   modal,
+  statsPage,
 } from './helpers/constants';
-import { getActiveLink, playAudio } from './helpers/utils';
+import { getActiveLink, playAudio, sortTable } from './helpers/utils';
 import { createCategoryCard, createWordCard } from './helpers/creators';
+import { loadStats, saveStats } from './helpers/stats';
 
 const categories = Object.keys(cards);
 
@@ -29,6 +31,7 @@ const currentState = {
   word: {},
   correctAnswers: 0,
   wrongAnswers: 0,
+  stats: {},
 };
 
 const updateRating = (success) => {
@@ -63,6 +66,9 @@ const updateMode = () => {
     const elementsToUpdate = pageContainer.querySelectorAll('.badge');
     elementsToUpdate.forEach((e) => e.classList[pageAddRemove](MODES.play));
 
+    playBtn.classList.add(classHide);
+    repeatBtn.classList.add(classHide);
+  } else if (activeLink.textContent === statsPage) {
     playBtn.classList.add(classHide);
     repeatBtn.classList.add(classHide);
   } else {
@@ -135,29 +141,104 @@ const renderSidenav = () => {
     li.innerHTML = `<a href="#">${e}</a>`;
     sidenav.append(li);
   });
+
+  const li = document.createElement('li');
+  li.innerHTML = `<a href="#" class="bottom">${statsPage}</a>`;
+  sidenav.append(li);
 };
 
 const renderPageContainer = () => {
   const activeLink = getActiveLink();
   logo.textContent = activeLink.textContent;
 
-  const row = document.createElement('div');
-  row.className = 'row';
+  if (logo.textContent === statsPage) {
+    const statsTable = document.createElement('table');
+    statsTable.className = 'striped responsive-table';
 
-  if (activeLink.textContent === startPage) {
+    const statsTHead = document.createElement('thead');
+    const statsTR = document.createElement('tr');
+
+    const statsTH1 = document.createElement('th');
+    statsTH1.textContent = 'Category';
+
+    const statsTH2 = document.createElement('th');
+    statsTH2.textContent = 'Word';
+
+    const statsTH3 = document.createElement('th');
+    statsTH3.textContent = 'Translation';
+
+    const statsTH4 = document.createElement('th');
+    statsTH4.textContent = 'Trains';
+
+    const statsTH5 = document.createElement('th');
+    statsTH5.textContent = 'Plays';
+
+    const statsTH6 = document.createElement('th');
+    statsTH6.textContent = 'Errors';
+
+    const statsTH7 = document.createElement('th');
+    statsTH7.textContent = '% errors';
+
+    const statsTBody = document.createElement('tbody');
+
+    statsTR.append(statsTH1);
+    statsTR.append(statsTH2);
+    statsTR.append(statsTH3);
+    statsTR.append(statsTH4);
+    statsTR.append(statsTH5);
+    statsTR.append(statsTH6);
+    statsTR.append(statsTH7);
+
+    statsTHead.append(statsTR);
+
+    statsTable.append(statsTHead);
+    statsTable.append(statsTBody);
+
     categories.forEach((category) => {
-      row.append(createCategoryCard(category));
-    });
-  } else {
-    cards[activeLink.textContent]
-      .sort(() => Math.random() - 0.5)
-      .forEach((word) => {
-        row.append(createWordCard(word));
-      });
-  }
+      currentState.stats[category].forEach((word) => {
+        const total = word.corrects + word.errors;
+        const row = statsTBody.insertRow();
 
-  pageContainer.innerHTML = '';
-  pageContainer.append(row);
+        row.insertCell().textContent = category;
+        row.insertCell().textContent = word.word;
+        row.insertCell().textContent = word.translation;
+        row.insertCell().textContent = word.trains;
+        row.insertCell().textContent = total;
+        row.insertCell().textContent = word.errors;
+        row.insertCell().textContent =
+          total === 0 ? 0 : Math.round((word.errors * 100) / total);
+      });
+    });
+
+    pageContainer.innerHTML = '';
+    pageContainer.append(statsTable);
+
+    statsTH1.addEventListener('click', () => sortTable(statsTable, 0));
+    statsTH2.addEventListener('click', () => sortTable(statsTable, 1));
+    statsTH3.addEventListener('click', () => sortTable(statsTable, 2));
+    statsTH4.addEventListener('click', () => sortTable(statsTable, 3));
+    statsTH5.addEventListener('click', () => sortTable(statsTable, 4));
+    statsTH6.addEventListener('click', () => sortTable(statsTable, 5));
+    statsTH7.addEventListener('click', () => sortTable(statsTable, 6));
+  } else {
+    const row = document.createElement('div');
+    row.className = 'row';
+
+    if (activeLink.textContent === startPage) {
+      categories.forEach((category) => {
+        row.append(createCategoryCard(category));
+      });
+    } else {
+      cards[activeLink.textContent]
+        .sort(() => Math.random() - 0.5)
+        .forEach((word) => {
+          row.append(createWordCard(word));
+        });
+    }
+
+    pageContainer.innerHTML = '';
+    pageContainer.append(row);
+  }
 
   updateMode();
 };
@@ -221,6 +302,11 @@ const addListeners = () => {
 
       playAudio(`/cards/${word.audioSrc}`);
 
+      currentState.stats[logo.textContent].find(
+        (w) => w.word === word.word,
+      ).trains += 1;
+      saveStats(currentState.stats);
+
       return;
     }
 
@@ -233,12 +319,22 @@ const addListeners = () => {
       playAudio(EFFECTS.correct);
       updateRating(true);
 
+      currentState.stats[logo.textContent].find(
+        (w) => w.word === currentState.word.word,
+      ).corrects += 1;
+      saveStats(currentState.stats);
+
       setTimeout(() => playNextWord(), 1000);
     } else if (!card.classList.contains('inactive')) {
       currentState.wrongAnswers += 1;
 
       playAudio(EFFECTS.error);
       updateRating(false);
+
+      currentState.stats[logo.textContent].find(
+        (w) => w.word === currentState.word.word,
+      ).errors += 1;
+      saveStats(currentState.stats);
     }
   });
 
@@ -278,6 +374,8 @@ const addListeners = () => {
     playAudio(`/cards/${currentState.word.audioSrc}`),
   );
 };
+
+currentState.stats = loadStats();
 
 renderSidenav();
 renderPageContainer();

@@ -13,4 +13,44 @@ const playAudio = (url) => {
   }
 };
 
-export { getActiveLink, playAudio };
+const sortTable = (table, column) => {
+  let rows;
+  let switching = true;
+  let i;
+  let x;
+  let y;
+  let shouldSwitch;
+  let dir = 'asc';
+  let switchcount = 0;
+
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < rows.length - 1; i += 1) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName('TD')[column];
+      y = rows[i + 1].getElementsByTagName('TD')[column];
+      if (dir === 'asc') {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir === 'desc') {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount += 1;
+    } else if (switchcount === 0 && dir === 'asc') {
+      dir = 'desc';
+      switching = true;
+    }
+  }
+};
+
+export { getActiveLink, playAudio, sortTable };

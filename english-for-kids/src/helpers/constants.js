@@ -1,5 +1,6 @@
 const classHide = 'hide';
 const startPage = 'Categories';
+const statsPage = 'Statistics';
 
 const EFFECTS = {
   correct: '/assets/audio/correct.mp3',
@@ -25,6 +26,7 @@ const modal = document.getElementById('modal');
 export {
   classHide,
   startPage,
+  statsPage,
   EFFECTS,
   MODES,
   sidenav,
