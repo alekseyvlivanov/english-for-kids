@@ -3,32 +3,24 @@ import M from 'materialize-css/dist/js/materialize.min';
 
 import './styles.css';
 import cards from './cards/cards';
+import {
+  classHide,
+  startPage,
+  EFFECTS,
+  MODES,
+  sidenav,
+  logo,
+  modeBtn,
+  rating,
+  pageContainer,
+  playBtn,
+  repeatBtn,
+  modal,
+} from './helpers/constants';
+import { getActiveLink, playAudio } from './helpers/utils';
+import { createCategoryCard, createWordCard } from './helpers/creators';
 
 const categories = Object.keys(cards);
-const sidenav = document.getElementById('sidenav');
-const logo = document.getElementById('logo');
-const modeBtn = document.getElementById('mode-btn');
-const rating = document.getElementById('rating');
-const pageContainer = document.getElementById('page-container');
-const playBtn = document.getElementById('play-btn');
-const repeatBtn = document.getElementById('repeat-btn');
-const audioPlayer = document.getElementById('audio');
-const modal = document.getElementById('modal');
-
-const classHide = 'hide';
-const startPage = 'Categories';
-
-const EFFECTS = {
-  correct: '/assets/audio/correct.mp3',
-  error: '/assets/audio/error.mp3',
-  failure: '/assets/audio/failure.mp3',
-  success: '/assets/audio/success.mp3',
-};
-
-const MODES = {
-  train: 'train',
-  play: 'play',
-};
 
 const currentState = {
   mode: MODES.train,
@@ -37,107 +29,6 @@ const currentState = {
   word: {},
   correctAnswers: 0,
   wrongAnswers: 0,
-};
-
-const playAudio = (url) => {
-  if (url) {
-    audioPlayer.src = url;
-    audioPlayer.play();
-  }
-};
-
-const createCategoryCard = (category) => {
-  const categoryCard = document.createElement('div');
-  categoryCard.className = 'col s12 m6 l4 xl3';
-
-  const classCard = document.createElement('div');
-  classCard.className = 'card hoverable category';
-  classCard.dataset.key = category;
-
-  const classCardImage = document.createElement('div');
-  classCardImage.className = 'card-image';
-
-  const cardImage = document.createElement('img');
-  cardImage.setAttribute(
-    'src',
-    `/cards/${
-      cards[category][Math.floor(Math.random() * cards[category].length)].image
-    }`,
-  );
-  cardImage.setAttribute('alt', category);
-
-  const cardTitle = document.createElement('span');
-  cardTitle.className = 'card-title';
-  cardTitle.innerHTML = `<span class="new badge truncate" data-badge-caption="">${category}</span>`;
-
-  classCardImage.append(cardImage);
-  classCardImage.append(cardTitle);
-  classCard.append(classCardImage);
-  categoryCard.append(classCard);
-
-  return categoryCard;
-};
-
-const createWordCard = (word) => {
-  const wordCard = document.createElement('div');
-  wordCard.className = 'col s12 m6 l4 xl3';
-
-  const flipCard = document.createElement('div');
-  flipCard.className = 'flip-card';
-
-  const cardFaceFront = document.createElement('div');
-  cardFaceFront.className = 'card-face-front';
-
-  const classCardFront = document.createElement('div');
-  classCardFront.className = 'card hoverable word';
-  classCardFront.dataset.key = word.word;
-
-  const classCardFrontImage = document.createElement('div');
-  classCardFrontImage.className = 'card-image';
-
-  const cardFrontImage = document.createElement('img');
-  cardFrontImage.setAttribute('src', `/cards/${word.image}`);
-  cardFrontImage.setAttribute('alt', word.word);
-
-  const classCardFrontContent = document.createElement('div');
-  classCardFrontContent.className = 'card-content truncate';
-  classCardFrontContent.innerHTML = `<div>${word.word}</div><div class="rotate"></div>`;
-
-  const cardFaceBack = document.createElement('div');
-  cardFaceBack.className = 'card-face-back';
-
-  const classCardBack = document.createElement('div');
-  classCardBack.className = 'card hoverable word';
-  classCardBack.dataset.key = word.word;
-
-  const classCardBackImage = document.createElement('div');
-  classCardBackImage.className = 'card-image';
-
-  const cardBackImage = document.createElement('img');
-  cardBackImage.setAttribute('src', `/cards/${word.image}`);
-  cardBackImage.setAttribute('alt', word.word);
-
-  const classCardBackContent = document.createElement('div');
-  classCardBackContent.className = 'card-content truncate';
-  classCardBackContent.innerHTML = `<div>${word.translation}</div>`;
-
-  classCardFrontImage.append(cardFrontImage);
-  classCardBackImage.append(cardBackImage);
-  classCardFront.append(classCardFrontImage);
-  classCardFront.append(classCardFrontContent);
-  classCardBack.append(classCardBackImage);
-  classCardBack.append(classCardBackContent);
-  cardFaceFront.append(classCardFront);
-  cardFaceBack.append(classCardBack);
-  flipCard.append(cardFaceFront);
-  flipCard.append(cardFaceBack);
-  wordCard.append(flipCard);
-
-  return wordCard;
-};
-
-const getActiveLink = () => {
-  return sidenav.querySelector('a.active');
 };
 
 const updateRating = (success) => {
