@@ -1,5 +1,5 @@
-import 'materialize-css/dist/css/materialize.min.css';
-import M from 'materialize-css/dist/js/materialize.min';
+import '@materializecss/materialize/dist/css/materialize.min.css';
+import M from '@materializecss/materialize/dist/js/materialize.min';
 
 import './styles.css';
 import cards from './cards/cards';
