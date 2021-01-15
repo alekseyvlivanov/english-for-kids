@@ -4,11 +4,11 @@
 | ---------------- | ---------------- | ---------------- |
 | 19.04.2020 23:59 | english-for-kids | english-for-kids |
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d00e0c44-9373-43db-bdb8-a144d538a096/deploy-status)](https://app.netlify.com/sites/english-for-kids-chessiah/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d00e0c44-9373-43db-bdb8-a144d538a096/deploy-status)](https://app.netlify.com/sites/english-for-kids-aleksey-vl-ivanov/deploys)
 
 You can see this project in action:
 
-- Netlify - <https://english-for-kids.chessiah.com>
+- Netlify - <https://english-for-kids.aleksey-vl-ivanov.com>
 
 **English for kids** - приложение для изучения английских слов детьми.
 

@@ -87,9 +87,6 @@ module.exports = {
         from: 'favicon.ico',
       },
       {
-        from: '_redirects',
-      },
-      {
         from: 'assets/',
         to: 'assets/',
       },

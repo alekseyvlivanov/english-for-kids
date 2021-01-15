@@ -1,6 +1,0 @@
-# Netlify redirects
-
-https://english-for-kids-chessiah.netlify.app/* https://english-for-kids.chessiah.com/:splat 301!
-http://english-for-kids-chessiah.netlify.app/* https://english-for-kids.chessiah.com/:splat 301!
-
-http://english-for-kids.chessiah.com/* https://english-for-kids.chessiah.com/:splat 301!
