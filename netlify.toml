@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "https://english-for-kids-aleksey-vl-ivanov.netlify.app/*"
+  to = "https://english-for-kids.aleksey-vl-ivanov.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://english-for-kids-aleksey-vl-ivanov.netlify.app/*"
+  to = "https://english-for-kids.aleksey-vl-ivanov.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://english-for-kids.aleksey-vl-ivanov.com/*"
+  to = "https://english-for-kids.aleksey-vl-ivanov.com/:splat"
+  status = 301
+  force = true

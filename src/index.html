@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English for kids</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <ul id="sidenav" class="sidenav train">
+        <li><a href="#" class="top active">Categories</a></li>
+      </ul>
+
+      <nav>
+        <div class="nav-wrapper grey lighten-5">
+          <a
+            id="menu"
+            href="#"
+            data-target="sidenav"
+            class="sidenav-trigger grey-text text-darken-4"
+            ><i class="material-icons">menu</i></a
+          >
+          <span
+            id="logo"
+            class="brand-logo center grey-text text-darken-4 truncate"
+            >English for kids</span
+          >
+          <ul class="right">
+            <li>
+              <a id="mode-btn" class="btn-small waves-effect waves-light train">
+                Mode
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div id="rating"></div>
+
+      <div id="page-container" class="section">
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+      </div>
+
+      <div class="flex">
+        <button
+          id="play-btn"
+          class="btn waves-effect waves-light hide"
+          type="submit"
+        >
+          Start game
+          <i class="material-icons right">school</i>
+        </button>
+
+        <a
+          id="repeat-btn"
+          class="btn-floating btn-large waves-effect waves-light hide"
+          ><i class="material-icons">repeat</i></a
+        >
+      </div>
+    </div>
+
+    <audio id="audio" src=""></audio>
+    <div id="modal" class="modal"></div>
+  </body>
+</html>
